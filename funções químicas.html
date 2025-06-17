@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funções Inorgânicas - Hub de Estudos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora:wght@400;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --transition-speed: 0.5s;
+            --timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --pink-dark: #a13d63; /* Cor para impressão */
+            
+            /* TEMA INORGÂNICO (VIBRANTE) - PADRÃO */
+            --cor-fundo-painel: linear-gradient(160deg, #10102e 0%, #1c1c4e 100%);
+            --cor-fundo-pagina: #0D0D2E;
+            --cor-texto-principal: #EAEAEA;
+            --cor-texto-painel: #FFFFFF;
+            --cor-primaria: #E91E63; /* Rosa vibrante */
+            --cor-secundaria: #03A9F4; /* Azul elétrico */
+            --cor-acento: #FFEB3B; /* Amarelo neon */
+            --cor-fundo-card: rgba(255, 255, 255, 0.03);
+            --sombra-card: 0 0 20px rgba(0, 0, 0, 0.2);
+            --sombra-card-hover: 0 0 30px rgba(3, 169, 244, 0.3);
+            --borda-card: 1px solid rgba(3, 169, 244, 0.3);
+            --font-principal: 'Poppins', sans-serif;
+            --font-titulo: 'Poppins', sans-serif;
+            --glow-color: var(--cor-acento);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: var(--cor-fundo-pagina); color: var(--cor-texto-principal);
+            font-family: var(--font-principal);
+        }
+
+        .painel-lateral {
+            position: fixed; top: 0; left: 0; width: 280px; height: 100vh;
+            background: var(--cor-fundo-painel); color: var(--cor-texto-painel);
+            display: flex; flex-direction: column; z-index: 1000;
+            transition: transform 0.4s ease;
+            box-shadow: 5px 0 25px rgba(0,0,0,0.2);
+        }
+        
+        .painel-header { padding: 30px 20px 20px 20px; }
+        .painel-titulo h1 { font-family: var(--font-titulo); font-size: 2rem; text-align: center; color: var(--cor-primaria); margin-bottom: 25px; font-weight: 700; text-shadow: 0 0 8px var(--cor-primaria); }
+
+        .navegacao-menu { list-style: none; overflow-y: auto; flex-grow: 1; padding: 0 20px; }
+        .navegacao-menu li { padding: 15px 10px; border-radius: 8px; cursor: pointer; margin-bottom: 5px; font-weight: 500; transition: background-color 0.3s ease, color 0.3s ease; display: flex; align-items: center; }
+        .navegacao-menu li i { width: 30px; text-align: center; margin-right: 10px; font-size: 1.1rem; color: var(--cor-secundaria); transition: color var(--transition-speed); }
+        .navegacao-menu li:hover { background-color: rgba(255, 255, 255, 0.1); }
+        .navegacao-menu li.active { background-color: var(--cor-primaria); color: white; font-weight: 700; }
+        .navegacao-menu li.active i { color: white; }
+
+        .painel-footer { margin-top: auto; padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .link-perfil { display: flex; align-items: center; gap: 15px; text-decoration: none; color: var(--cor-texto-painel); }
+        .link-perfil img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--cor-secundaria); }
+        .link-perfil span { font-weight: 600; transition: color 0.3s, text-shadow 0.3s; }
+        .link-perfil:hover span { animation: pulse-glow 1.5s infinite ease-in-out; }
+
+        @keyframes pulse-glow {
+            0%, 100% { color: var(--cor-texto-painel); text-shadow: 0 0 5px transparent; }
+            50% { color: var(--glow-color); text-shadow: 0 0 10px var(--glow-color); }
+        }
+
+        .area-conteudo { margin-left: 280px; padding: 50px; }
+        .secao-conteudo { display: none; animation: fadeIn 0.7s ease-out; }
+        .secao-conteudo.ativo { display: block; }
+
+        .card { background-color: var(--cor-fundo-card); border: var(--borda-card); border-radius: 15px; padding: 35px; margin-bottom: 35px; box-shadow: var(--sombra-card); transition: transform 0.3s ease, box-shadow 0.3s ease, background-color var(--transition-speed), border var(--transition-speed); }
+        .card:hover { transform: translateY(-5px); box-shadow: var(--sombra-card-hover); }
+        .card h2 { font-family: var(--font-titulo); font-weight: 700; font-size: 2rem; color: var(--cor-primaria); margin: 0 0 20px 0; padding-bottom: 15px; border-bottom: 2px solid var(--cor-secundaria); display: flex; align-items: center; gap: 15px; transition: color var(--transition-speed), border-color var(--transition-speed); }
+        .card h3 { font-family: var(--font-titulo); font-size: 1.5rem; color: var(--cor-texto-principal); margin-top: 25px; margin-bottom: 15px; }
+        .card h4 { font-family: var(--font-titulo); font-size: 1.2rem; color: var(--cor-primaria); margin-bottom: 10px; padding-top: 10px; }
+        .card p, .card li { font-size: 1.1rem; line-height: 1.7; }
+        .area-conteudo a { color: var(--cor-acento); text-decoration: none; font-weight: bold; transition: color 0.3s, text-shadow 0.3s; }
+        .area-conteudo a:hover { color: var(--cor-secundaria); text-shadow: 0 0 5px var(--cor-secundaria); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .botao-menu-mobile { display: none; position: fixed; top: 15px; right: 15px; background: var(--cor-primaria); color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 1.5rem; z-index: 1001; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        
+        .hidden { display: none !important; }
+        .config-section { background-color: rgba(0,0,0,0.05); padding: 25px; border-radius: 10px; margin-bottom: 25px; }
+        .config-group { margin-bottom: 20px; }
+        .config-group h4 { font-family: var(--font-titulo); font-size: 1.3rem; margin-bottom: 15px; color: var(--cor-primaria); }
+        .options-grid-check, .options-grid-btn { display: flex; flex-wrap: wrap; gap: 15px; }
+        .config-btn { padding: 10px 20px; background-color: var(--cor-fundo-card); color: var(--cor-texto-principal); border: 2px solid var(--borda-card); border-radius: 50px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; }
+        .config-btn.selected, .config-btn:hover { background-color: var(--cor-primaria); color: white; border-color: var(--cor-primaria); transform: translateY(-2px); }
+        .checkbox-label { display: flex; align-items: center; gap: 10px; background-color: var(--cor-fundo-card); padding: 12px 20px; border-radius: 8px; border: var(--borda-card); cursor: pointer; transition: all 0.3s ease; }
+        .checkbox-label:hover { border-color: var(--cor-primaria); }
+        .checkbox-label input { display: none; }
+        .checkbox-label .checkmark { width: 20px; height: 20px; border: 2px solid var(--cor-secundaria); border-radius: 4px; display: inline-block; position: relative; }
+        .checkbox-label input:checked + .checkmark { background-color: var(--cor-primaria); border-color: var(--cor-primaria); }
+        .checkbox-label input:checked + .checkmark::after { content: '✔'; color: white; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-size: 14px; }
+        .action-button-main { display: block; width: 100%; padding: 15px; background: var(--cor-acento); color: var(--cor-primaria); border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.2rem; margin-top: 25px; transition: all 0.3s; }
+        .action-button-main:hover { background-color: var(--cor-primaria); color: white; }
+        .game-view { text-align: center; }
+        .game-view .test-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 10px; background-color: rgba(0,0,0,0.1); border-radius: 8px; flex-wrap: wrap; gap: 10px;}
+        .game-view .test-stats-display { font-weight: 600; display: flex; gap: 20px; flex-grow: 1; justify-content: center; }
+        .game-view .exit-btn { background-color: #7f8c8d; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .game-view .timer-container { font-size: 2rem; font-weight: bold; margin: 10px 0 20px; color: var(--cor-primaria); }
+        .game-view .question-container { margin: 20px 0; padding: 20px; background-color: rgba(0,0,0,0.05); border-radius: 10px; min-height: 380px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .test-results { background-color: var(--cor-fundo-card); padding: 30px; border-radius: 15px; margin-top: 20px; text-align: center; }
+        .results-percentage { font-size: 3.5rem; font-weight: bold; margin: 20px 0; }
+        .errors-list { margin-top: 30px; text-align: left; }
+        .error-item { padding: 15px; border-bottom: 1px solid var(--borda-card); background-color: rgba(0,0,0,0.02); }
+        .error-item:last-child { border-bottom: none; }
+        .error-item p { margin: 5px 0; font-size: 1rem; }
+        .error-item .user-answer { color: var(--cor-primaria); font-weight: bold; }
+        .error-item .correct-answer { color: var(--cor-secundaria); font-weight: bold; }
+        .results-actions { display: flex; gap: 15px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
+        .question-container .card { perspective: 1000px; width: 100%; min-height: 280px; position: relative; background-color: transparent; border: none; box-shadow: none; }
+        .question-container .card:hover { transform: none; box-shadow: none; }
+        .question-container .card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d; }
+        .question-container .card.flipped .card-inner { transform: rotateY(180deg); }
+        .question-container .card-front, .question-container .card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: var(--cor-fundo-card); border-radius: 15px; padding: 20px; box-shadow: var(--sombra-card); box-sizing: border-box; }
+        .question-container .card-back { transform: rotateY(180deg); }
+        .question-container .card-question-text { font-size: 1.5rem; text-align: center; margin-bottom: 20px; }
+        .question-container .formula { font-family: 'Courier New', Courier, monospace; font-size: 2rem; font-weight: bold; margin: 10px 0; color: var(--cor-texto-principal); text-align: center; word-break: break-all; }
+        .question-container .card-answer-text { font-size: 1.5rem; font-weight: bold; text-align: center; line-height: 1.5; color: var(--cor-texto-principal); }
+        .question-container .card-answer-text p { margin: 8px 0; }
+        .question-container .show-answer-btn { background: var(--cor-acento); color: #111; padding: 12px 25px; border-radius: 50px; font-weight: bold; margin-top: 20px; }
+        .question-container .correct-btn { background-color: var(--cor-secundaria); }
+        .question-container .incorrect-btn { background-color: var(--cor-primaria); }
+
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 1rem; }
+        .info-block { background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(3, 169, 244, 0.2); border-left: 5px solid var(--cor-secundaria); padding: 20px; border-radius: 8px; transition: all 0.3s ease; }
+        .info-block:hover { box-shadow: 0 0 25px rgba(3, 169, 244, 0.4); border-color: var(--cor-secundaria); }
+        .info-block ul { list-style: none; padding-left: 0; }
+        .info-block li { font-size: 1rem; margin-bottom: 8px; word-break: break-all; }
+        .info-block h4 { color: var(--cor-acento) !important; }
+
+        .table-container { overflow-x: auto; margin-top: 1rem; border-radius: 8px; border: 1px solid var(--borda-card); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        table th, table td { border: 1px solid var(--borda-card); padding: 12px; text-align: left; }
+        table thead { background-color: rgba(0,0,0,0.1); font-family: var(--font-titulo); font-weight: 600; color: var(--cor-acento); }
+        
+        #secao-links .info-grid { display: block; }
+        #secao-links .info-block-link { text-decoration: none; display: block; margin-bottom: 25px; }
+        #secao-links .info-block-link .info-block { width: 100%; }
+        #secao-links .info-block-link h4 { transition: color 0.3s ease; }
+        #secao-links .info-block-link:hover h4 { color: var(--cor-secundaria) !important; }
+
+        #secao-alkaline .card { min-height: 70vh; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 40px; }
+        .alkaline-title { font-size: clamp(2.5rem, 8vw, 6rem); text-align: center; font-family: var(--font-titulo); color: var(--cor-primaria); animation: pulse-glow 2s infinite alternate; }
+        .video-button { display: inline-flex; align-items: center; justify-content: center; gap: 20px; margin-top: 0; padding: 20px 40px; background-color: var(--cor-primaria); color: white; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 1.5rem; transition: all 0.3s ease; }
+        .video-button:hover { background-color: var(--cor-acento); color: #111; transform: scale(1.05); box-shadow: 0 0 20px var(--cor-acento); }
+
+        /* --- PRINT STYLES --- */
+        .print-only { display: none; }
+        
+        @media print {
+            @page { size: A4; margin: 1.5cm; @bottom-center { content: "Projeto desenvolvido por Priscila \"LaLa\" - @studies_lala"; font-family: sans-serif; font-size: 10pt; font-weight: bold; color: var(--pink-dark); } }
+            body { font-family: Georgia, 'Times New Roman', Times, serif; font-size: 11pt; color: #000; background: #fff !important; }
+            .area-conteudo, .painel-lateral, .botao-menu-mobile { display: none !important; }
+            .print-only { display: block !important; }
+            .print-header { text-align: center; margin-bottom: 1.5cm; padding-bottom: 1cm; border-bottom: 2px solid #000;}
+            .print-header h2 { font-size: 16pt; margin: 0 0 8px 0; color: var(--pink-dark); }
+            .print-header p { font-size: 11pt; margin: 4px 0; color: var(--pink-dark); }
+            .print-questions-grid { column-count: 2; column-gap: 1.2cm; column-rule: 1px solid #ccc; }
+            .print-question-item { padding-bottom: 10px; margin-bottom: 10px; -webkit-column-break-inside: avoid; page-break-inside: avoid; }
+            .print-question-item h4 { font-size: 11pt; font-weight: 700; text-transform: uppercase; margin: 0 0 8px 0; color: var(--pink-dark); }
+            .print-question-item p { margin: 0 0 12px 0; line-height: 1.4; }
+            .answer-box { min-height: 80px; border: 1.5pt solid #444; border-radius: 4px; padding: 5px; }
+            .mcq-options-print .mcq-option-print { margin-bottom: 8px; }
+            .print-gabarito { page-break-before: always; padding-top: 1cm; }
+            .print-gabarito h2 { text-align: center; margin-bottom: 1cm; text-transform: uppercase; color: var(--pink-dark); }
+            .print-gabarito ol { list-style-type: none; padding-left: 0; column-count: 3; column-gap: 20px; }
+            .print-gabarito li { margin-bottom: 10px; font-size: 10pt; }
+        }
+        
+        /* --- RESPONSIVENESS IMPROVEMENTS --- */
+        @media (max-width: 900px) { 
+            .painel-lateral { transform: translateX(-100%); } 
+            .painel-lateral.ativo { transform: translateX(0); } 
+            .area-conteudo { margin-left: 0; padding: 80px 20px 20px 20px; } 
+            .botao-menu-mobile { display: block; } 
+            
+            /* Test View Responsiveness */
+            .game-view .test-stats-display { font-size: 0.9rem; gap: 15px; }
+            .game-view .question-container { min-height: 320px; padding: 15px; }
+            .question-container .formula { font-size: 1.5rem; }
+            .question-container .card-question-text { font-size: 1.2rem; }
+            .question-container .card-answer-text { font-size: 1.2rem; }
+            .question-container .card-front, .question-container .card-back { padding: 15px; }
+            .options-grid-btn .config-btn.mcq-option { width: 100%; }
+        }
+    </style>
+</head>
+<body class="modo-inorganico">
+
+    <button class="botao-menu-mobile"><i class="fas fa-bars"></i></button>
+
+    <aside class="painel-lateral">
+        <div class="painel-header">
+            <div class="painel-titulo"><h1>Funções Inorgânicas</h1></div>
+        </div>
+        <ul class="navegacao-menu" id="menu-itens"></ul>
+        <div class="painel-footer">
+            <a href="https://x.com/studies_lala" target="_blank" rel="noopener noreferrer" class="link-perfil">
+                <img src="icon.jpeg" alt="Logo @studies_lala">
+                <span>@studies_lala</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="area-conteudo">
+        <!-- SEÇÕES DE CONTEÚDO TEÓRICO -->
+        <section class="secao-conteudo" id="funcao-acido">
+             <div class="card">
+                <h2><i class="fas fa-flask-vial"></i> Ácidos</h2>
+                <h3>Definições</h3>
+                <div class="info-grid"><div class="info-block"><h4>Arrhenius</h4><p>Substância que ao sofrer ionização em água libera como único cátion o íon H⁺.</p></div><div class="info-block"><h4>Brønsted-Lowry</h4><p>Substância que doa prótons (H⁺).</p></div><div class="info-block"><h4>Lewis</h4><p>Espécie que aceita um par de elétrons.</p></div></div>
+                <h3>Formação e Classificação</h3>
+                <ul class="ficha-detalhes" style="padding: 20px 0;"><li><strong>Reação de Formação:</strong> Óxido ácido + Água → Ácido</li><li><strong>Hidrácidos:</strong> Ácidos sem oxigênio</li><li><strong>Oxiácidos:</strong> Ácidos com oxigênio</li></ul>
+                <h3>Força dos Ácidos</h3>
+                <div class="info-grid"><div class="info-block"><h4>Hidrácidos</h4><ul class="ficha-detalhes"><li><strong>Forte:</strong> HCl, HBr e HI</li><li><strong>Moderado:</strong> HF</li><li><strong>Fraco:</strong> Todos os outros</li></ul></div><div class="info-block"><h4>Oxiácidos</h4><ul class="ficha-detalhes"><li><strong>Forte:</strong> Nº de O - Nº de H > 1</li><li><strong>Moderado:</strong> Nº de O - Nº de H = 1</li><li><strong>Fraco:</strong> Nº de O - Nº de H < 1</li></ul></div></div>
+                <h3>Nomenclatura</h3>
+                <div class="info-grid"><div class="info-block"><h4>Hidrácidos</h4><p>Ácido + [nome do elemento] + <strong>ídrico</strong></p></div><div class="info-block"><h4>Oxiácidos</h4><ul class="ficha-detalhes"><li><strong>NOX +1,+2:</strong> Ácido <strong>hipo</strong>...<strong>oso</strong></li><li><strong>NOX +3,+4:</strong> Ácido ...<strong>oso</strong></li><li><strong>NOX +5,+6:</strong> Ácido ...<strong>ico</strong></li><li><strong>NOX +7:</strong> Ácido <strong>per</strong>...<strong>ico</strong></li><li><strong>Exceções:</strong> Ácidos com C⁺⁴, Si⁺⁴ e B⁺³ terminam em "ico".</li></ul></div></div>
+                <h3>Hidratação de Óxidos (Nomenclatura especial)</h3>
+                <p>A nomenclatura Orto, Piro e Meta depende da quantidade de moléculas de água que reagem com o óxido ácido.</p>
+                <div class="table-container"><table><thead><tr><th>Óxido</th><th>1 H₂O (Meta)</th><th>2 H₂O (Piro)</th><th>3 H₂O (Orto)</th></tr></thead><tbody><tr><td>P₂O₅</td><td>HPO₃ (Ác. metafosfórico)</td><td>H₄P₂O₇ (Ác. pirofosfórico)</td><td>H₃PO₄ (Ác. ortofosfórico)</td></tr><tr><td>P₂O₃</td><td>HPO₂ (Ác. metafosforoso)</td><td>H₄P₂O₅ (Ác. pirofosforoso)</td><td>H₃PO₃ (Ác. ortofosforoso)</td></tr></tbody></table></div>
+            </div>
+        </section>
+        <section class="secao-conteudo" id="funcao-base">
+            <div class="card">
+                <h2><i class="fas fa-soap"></i> Bases</h2>
+                <h3>Definições</h3>
+                <div class="info-grid"><div class="info-block"><h4>Arrhenius</h4><p>Substância que libera íons OH⁻ em solução aquosa.</p></div><div class="info-block"><h4>Brønsted-Lowry</h4><p>Substância que aceita prótons (H⁺).</p></div><div class="info-block"><h4>Lewis</h4><p>Espécie que doa um par de elétrons.</p></div></div>
+                <h3>Propriedades</h3>
+                <div class="info-grid">
+                    <div class="info-block"><h4>Força</h4><ul class="ficha-detalhes"><li><strong>Fortes:</strong> Família 1A e 2A.</li><li><strong>Fracas:</strong> Todas as outras.</li><li><strong>Exceção:</strong> Mg(OH)₂ e Be(OH)₂ são fracas.</li></ul></div>
+                    <div class="info-block"><h4>Solubilidade</h4><ul class="ficha-detalhes"><li><strong>Solúveis:</strong> Família 1A e NH₄⁺.</li><li><strong>Parcialmente Solúveis:</strong> Família 2A.</li><li><strong>Insolúveis:</strong> Todas as outras.</li><li><strong>Exceção:</strong> Mg(OH)₂ é insolúvel.</li></ul></div>
+                </div>
+                <h3>Nomenclatura</h3>
+                <div class="info-grid"><div class="info-block"><h4>Regra Geral</h4><ul class="ficha-detalhes"><li><strong>NOX Fixo:</strong> Hidróxido de [nome do elemento].</li><li><strong>NOX Variável:</strong> Hidróxido de [nome do elemento] + NOX em romanos.</li></ul></div></div>
+            </div>
+        </section>
+        <section class="secao-conteudo" id="funcao-sal">
+            <div class="card">
+                <h2><i class="fas fa-gem"></i> Sais</h2>
+                <h3>Definição</h3><p>Compostos iônicos formados pela reação entre um ácido e uma base, resultando em um cátion (exceto H⁺) e um ânion (exceto OH⁻). Em solução aquosa, eles se dissociam, conduzindo eletricidade.</p>
+                <h3>Reações de Produção</h3><ul style="list-style-position: inside; padding: 1rem;"><li>Ácido + Base → Sal + Água</li><li>Óxido ácido + Base → Sal + Água</li><li>Óxido básico + Ácido → Sal + Água</li><li>Óxido anfótero + Ácido/Base → Sal + Água</li><li>Óxido ácido + Óxido básico → Sal</li></ul>
+                <h3>Nomenclatura</h3><div class="info-grid"><div class="info-block"><h4>Regra: [Nome do Ânion] de [Nome do Cátion]</h4><p>O nome do ânion deriva do ácido que o originou:</p><ul class="ficha-detalhes"><li>Ácido ...ídrico → Ânion ...<strong>eto</strong></li><li>Ácido ...oso → Ânion ...<strong>ito</strong></li><li>Ácido ...ico → Ânion ...<strong>ato</strong></li></ul></div></div>
+            </div>
+        </section>
+        <section class="secao-conteudo" id="funcao-oxido">
+            <div class="card">
+                <h2><i class="fas fa-fire-extinguisher"></i> Óxidos</h2>
+                <h3>Definição</h3><p>Compostos binários (formados por apenas 2 elementos) sendo um deles, e o mais eletronegativo, o oxigênio. (Compostos formados por oxigênio e flúor não podem ser óxidos pois o flúor é mais eletronegativo que o oxigênio).</p>
+                <h3>Tipos de Óxidos</h3>
+                <div class="info-grid">
+                    <div class="info-block"><h4>Óxido Básico</h4><ul class="ficha-detalhes"><li><strong>Composição:</strong> Metal com NOX +1 ou +2.</li><li><strong>Nomenclatura:</strong> Óxido de [nome] (+ NOX se variável).</li><li><strong>Reage com Água/Ácido:</strong> Produz base / sal e água.</li></ul></div>
+                    <div class="info-block"><h4>Óxido Anfótero</h4><ul class="ficha-detalhes"><li><strong>Composição:</strong> Metal com NOX +3/+4 (e alguns +2).</li><li><strong>Nomenclatura:</strong> Óxido de [nome] + NOX.</li><li><strong>Reage com Base/Ácido:</strong> Produz sal e água em ambos.</li></ul></div>
+                    <div class="info-block"><h4>Óxido Ácido</h4><ul class="ficha-detalhes"><li><strong>Nomenclatura:</strong> Anidrido [prefixo]...[sufixo].</li><li><strong>NOX +1/+2:</strong> hipo...oso</li><li><strong>NOX +3/+4:</strong> ...oso</li><li><strong>NOX +5/+6:</strong> ...ico</li><li><strong>NOX +7:</strong> per...ico</li><li><strong>Exceções:</strong> C⁺⁴, Si⁺⁴, B⁺³ terminam em ICO.</li></ul></div>
+                    <div class="info-block"><h4>Óxido Neutro</h4><ul class="ficha-detalhes"><li><strong>Composição:</strong> H₂O, NO, CO, N₂O.</li><li><strong>Nomenclatura:</strong> Nomes específicos.</li><li><strong>Reatividade:</strong> Não reagem com água, base ou ácido.</li></ul></div>
+                    <div class="info-block"><h4>Óxidos Duplos/Salinos</h4><ul class="ficha-detalhes"><li><strong>Composição:</strong> E₃O₄</li><li><strong>Nomenclatura:</strong> Óxido duplo de [elemento] + NOXs.</li></ul></div>
+                    <div class="info-block"><h4>Peróxido</h4><ul class="ficha-detalhes"><li><strong>Composição:</strong> Ânion O₂²⁻ (NOX -1).</li><li><strong>Nomenclatura:</strong> Peróxido de [nome].</li></ul></div>
+                     <div class="info-block"><h4>Superóxido</h4><ul class="ficha-detalhes"><li><strong>Composição:</strong> Ânion O₂⁻ (NOX -1/2).</li><li><strong>Nomenclatura:</strong> Superóxido de [nome].</li></ul></div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="secao-conteudo" id="secao-links">
+            <div class="card">
+                <h2><i class="fas fa-link"></i> Links Úteis</h2>
+                <div class="info-grid">
+                    <a href="https://x.com/studies_lala" target="_blank" rel="noopener noreferrer" class="info-block-link">
+                        <div class="info-block"><h4><i class="fas fa-user-circle"></i> Perfil da Criadora</h4></div>
+                    </a>
+                    <a href="https://priprincesa26.github.io/studies_lala/" target="_blank" rel="noopener noreferrer" class="info-block-link">
+                        <div class="info-block"><h4><i class="fas fa-pen-nib"></i> Painel de controle</h4></div>
+                    </a>
+                    <a href="https://priprincesa26.github.io/zoologia/" target="_blank" rel="noopener noreferrer" class="info-block-link">
+                        <div class="info-block"><h4><i class="fas fa-paw"></i> Site-resumo de zoologia</h4></div>
+                    </a>
+                    <a href="https://priprincesa26.github.io/f-bricadereda-es/" target="_blank" rel="noopener noreferrer" class="info-block-link">
+                        <div class="info-block"><h4><i class="fas fa-language"></i> Fábrica de redação</h4></div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="secao-conteudo" id="secao-alkaline">
+            <div class="card">
+                <h2 class="alkaline-title">She's not acid nor alkaline</h2>
+                <a href="https://www.youtube.com/watch?v=uU5vVT_Cp7c" target="_blank" class="video-button">
+                    <i class="fab fa-youtube"></i> Assistir 'Alkaline' no YouTube
+                </a>
+            </div>
+        </section>
+        
+        <section class="secao-conteudo" id="secao-jogos">
+            <div id="game-container">
+                <div id="game-config-view" class="card">
+                    <h2><i class="fas fa-dice"></i> Gerador de Testes</h2>
+                    <p>Selecione os conteúdos, a quantidade de perguntas e o modo de teste para gerar uma avaliação personalizada.</p>
+                    <div class="config-section">
+                        <div class="config-group"><h4>1. Escolha os conteúdos:</h4><div class="options-grid-check" id="topic-options"><label class="checkbox-label"><input type="checkbox" name="topic" value="oxide" checked><span class="checkmark"></span> Óxidos</label><label class="checkbox-label"><input type="checkbox" name="topic" value="acid-base" checked><span class="checkmark"></span> Ácidos e Bases</label><label class="checkbox-label"><input type="checkbox" name="topic" value="salt" checked><span class="checkmark"></span> Sais</label></div></div>
+                        <div class="config-group"><h4>2. Quantas perguntas?</h4><div class="options-grid-btn" id="questions-options"><button class="config-btn selected" data-questions="5">5</button><button class="config-btn" data-questions="10">10</button><button class="config-btn" data-questions="15">15</button><button class="config-btn" data-questions="20">20</button><button class="config-btn" data-questions="25">25</button><button class="config-btn" data-questions="30">30</button><button class="config-btn" data-questions="35">35</button><button class="config-btn" data-questions="40">40</button><button class="config-btn" data-questions="45">45</button><button class="config-btn" data-questions="50">50</button></div></div>
+                        <div class="config-group"><h4>3. Com ou sem timer?</h4><div class="options-grid-btn" id="timer-options"><button class="config-btn selected" data-timer="false">Sem timer</button><button class="config-btn" data-timer="true">Com timer</button></div></div>
+                    </div>
+                    <button id="generate-test-btn" class="action-button-main">Gerar Prova</button>
+                </div>
+                <div id="mode-choice-view" class="card hidden"><h2>Como você quer fazer a prova?</h2><div class="options-grid-btn" style="justify-content: center; align-items: center; gap: 20px;"><button id="start-online-btn" class="config-btn" style="min-width: 180px; height: 60px;">Realizar Online</button><button id="print-test-btn" class="config-btn" style="min-width: 180px; height: 60px;">Imprimir Prova</button><button id="back-to-config-btn" class="config-btn" style="min-width: 120px;">Voltar</button></div></div>
+                <div id="test-view" class="game-view hidden"><div class="test-header"><div class="test-stats-display"><span>Pergunta <span id="current-question">1</span> de <span id="total-questions">10</span></span><span><i class="fas fa-check" style="color:var(--cor-secundaria)"></i> <span id="test-correct">0</span></span><span><i class="fas fa-times" style="color:var(--cor-primaria)"></i> <span id="test-incorrect">0</span></span></div><button id="exit-test-btn" class="exit-btn">Sair</button></div><div id="timer-container" class="timer-container hidden"></div><div id="test-question-container" class="question-container"></div></div>
+                <div id="test-results-view" class="test-results hidden"></div>
+            </div>
+        </section>
+    </main>
+    
+    <div id="print-version" class="print-only"></div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const fullDB = {
+            oxides: [ { topic: 'oxide', formula: "Mn₂O₇", name: "Anidrido permangânico", type: "Óxido ácido" }, { topic: 'oxide', formula: "CaO", name: "Óxido de cálcio", type: "Óxido básico" }, { topic: 'oxide', formula: "Al₂O₃", name: "Óxido de alumínio", type: "Óxido anfótero" }, { topic: 'oxide', formula: "PbO", name: "Óxido de chumbo II", type: "Óxido anfótero" }, { topic: 'oxide', formula: "I₂O₇", name: "Anidrido periódico", type: "Óxido ácido" }, { topic: 'oxide', formula: "Cl₂O₃", name: "Anidrido cloroso", type: "Óxido ácido" }, { topic: 'oxide', formula: "N₂O₃", name: "Anidrido nitroso", type: "Óxido ácido" }, { topic: 'oxide', formula: "CO₂", name: "Dióxido de carbono (Anidrido carbônico)", type: "Óxido ácido" }, { topic: 'oxide', formula: "Na₂O₂", name: "Peróxido de sódio", type: "Peróxido" }, { topic: 'oxide', formula: "Ni₃O₄", name: "Óxido duplo de níquel II e III", type: "Óxido duplo" }, { topic: 'oxide', formula: "NO", name: "Óxido nítrico", type: "Óxido neutro" }, { topic: 'oxide', formula: "H₂O", name: "Água (Protóxido de hidrogênio)", type: "Óxido neutro" }, { topic: 'oxide', formula: "CrO₃", name: "Anidrido crômico", type: "Óxido ácido" }, { topic: 'oxide', formula: "B₂O₃", name: "Anidrido bórico", type: "Óxido ácido" }, { topic: 'oxide', formula: "BaO", name: "Óxido de bário", type: "Óxido básico" }, { topic: 'oxide', formula: "KO₂", name: "Superóxido de potássio", type: "Superóxido" }, { topic: 'oxide', formula: "SnO", name: "Óxido de estanho II", type: "Óxido anfótero" }, { topic: 'oxide', formula: "Br₂O", name: "Anidrido hipobromoso", type: "Óxido ácido" }, { topic: 'oxide', formula: "SO₂", name: "Dióxido de enxofre (Anidrido sulfuroso)", type: "Óxido ácido" }, { topic: 'oxide', formula: "CaO₂", name: "Peróxido de cálcio", type: "Peróxido" }, { topic: 'oxide', formula: "SrO", name: "Óxido de estrôncio", type: "Óxido básico" }, { topic: 'oxide', formula: "Cu₂O", name: "Óxido de cobre I", type: "Óxido básico" }, { topic: 'oxide', formula: "Co₂O₃", name: "Óxido de cobalto III", type: "Óxido básico" }, { topic: 'oxide', formula: "N₂O", name: "Óxido nitroso", type: "Óxido neutro" }, { topic: 'oxide', formula: "Br₂O₅", name: "Anidrido brômico", type: "Óxido ácido" }, { topic: 'oxide', formula: "Cl₂O", name: "Anidrido hipocloroso", type: "Óxido ácido" }, { topic: 'oxide', formula: "CO", name: "Monóxido de carbono", type: "Óxido neutro" }, { topic: 'oxide', formula: "Fe₃O₄", name: "Óxido duplo de ferro II e III (Magnetita)", type: "Óxido duplo" }, { topic: 'oxide', formula: "Pb₃O₄", name: "Óxido duplo de chumbo II e IV (Zarcão)", type: "Óxido duplo" }, { topic: 'oxide', formula: "Na₂O", name: "Óxido de sódio", type: "Óxido básico" }, { topic: 'oxide', formula: "Ag₂O", name: "Óxido de prata", type: "Óxido básico" }, { topic: 'oxide', formula: "Au₂O₃", name: "Óxido de ouro III", type: "Óxido básico" }, { topic: 'oxide', formula: "MgO₂", name: "Peróxido de magnésio", type: "Peróxido" }, { topic: 'oxide', formula: "SO₃", name: "Trióxido de enxofre (Anidrido sulfúrico)", type: "Óxido ácido" }, { topic: 'oxide', formula: "ZnO", name: "Óxido de zinco", type: "Óxido anfótero" }, { topic: 'oxide', formula: "Li₂O", name: "Óxido de lítio", type: "Óxido básico" }, { topic: 'oxide', formula: "P₄O₁₀", name: "Decaóxido de tetrafósforo (Anidrido fosfórico)", type: "Óxido ácido" }, { topic: 'oxide', formula: "H₂O₂", name: "Peróxido de hidrogênio (Água Oxigenada)", type: "Peróxido" }, { topic: 'oxide', formula: "CrO", name: "Óxido de cromo II", type: "Óxido básico" }, { topic: 'oxide', formula: "Cr₂O₃", name: "Óxido de cromo III", type: "Óxido anfótero" }, { topic: 'oxide', formula: "MnO", name: "Óxido de manganês II", type: "Óxido básico" }, { topic: 'oxide', formula: "MnO₃", name: "Anidrido mangânico", type: "Óxido ácido" }, { topic: 'oxide', formula: "Au₂O", name: "Óxido de ouro I", type: "Óxido básico" }, { topic: 'oxide', formula: "Hg₂O", name: "Óxido de mercúrio I", type: "Óxido básico" }],
+            acidsBases: [ { topic: 'acid-base', formula: "HMnO₄", name: "Ácido permangânico", type: "Ácido", strength: "Fraco" }, { topic: 'acid-base', formula: "Mg(OH)₂", name: "Hidróxido de magnésio", type: "Base", strength: "Forte" }, { topic: 'acid-base', formula: "Al(OH)₃", name: "Hidróxido de alumínio", type: "Base", strength: "Fraca" }, { topic: 'acid-base', formula: "Pb(OH)₄", name: "Hidróxido de chumbo IV", type: "Base", strength: "Fraca" }, { topic: 'acid-base', formula: "HNO₂", name: "Ácido Nitroso", type: "Ácido", strength: "Fraco" }, { topic: 'acid-base', formula: "HClO₂", name: "Ácido cloroso", type: "Ácido", strength: "Fraco" }, { topic: 'acid-base', formula: "HNO₃", name: "Ácido nítrico", type: "Ácido", strength: "Forte" }, { topic: 'acid-base', formula: "H₂CO₃", name: "Ácido carbônico", type: "Ácido", strength: "Fraco" }, { topic: 'acid-base', formula: "Cd(OH)₂", name: "Hidróxido de cádmio", type: "Base", strength: "Fraca" }, { topic: 'acid-base', formula: "Hg(OH)₂", name: "Hidróxido de mercúrio II", type: "Base", strength: "Fraca" }, { topic: 'acid-base', formula: "HI", name: "Ácido iodídrico", type: "Ácido", strength: "Forte" }, { topic: 'acid-base', formula: "HPO₂", name: "Ácido metaforforoso", type: "Ácido", strength: "Fraco" }, { topic: 'acid-base', formula: "H₂CrO₄", name: "Ácido crômico", type: "Ácido", strength: "Fraco" }, { topic: 'acid-base', formula: "LiOH", name: "Hidróxido de lítio", type: "Base", strength: "Forte" }, { topic: 'acid-base', formula: "Ba(OH)₂", name: "Hidróxido de bário", type: "Base", strength: "Forte" }, { topic: 'acid-base', formula: "HCN", name: "Ácido cianídrico", type: "Ácido", strength: "Fraco" }, { topic: 'acid-base', formula: "Sn(OH)₄", name: "Hidróxido de estanho IV", type: "Base", strength: "Fraca" }, { topic: 'acid-base', formula: "HBrO", name: "Ácido hipobromoso", type: "Ácido", strength: "Fraco" }, { topic: 'acid-base', formula: "H₂SO₄", name: "Ácido sulfúrico", type: "Ácido", strength: "Forte" }, { topic: 'acid-base', formula: "Zn(OH)₂", name: "Hidróxido de zinco", type: "Base", strength: "Fraca" }, { topic: 'acid-base', formula: "H₄Sb₂O₇", name: "Ácido piroantimônico", type: "Ácido", strength: "Fraco" }, { topic: 'acid-base', formula: "Cu(OH)₂", name: "Hidróxido de cobre II", type: "Base", strength: "Fraca" }, { topic: 'acid-base', formula: "Co(OH)₂", name: "Hidróxido de cobalto II", type: "Base", strength: "Fraca" }, { topic: 'acid-base', formula: "H₂S", name: "Ácido sulfídrico", type: "Ácido", strength: "Fraco" }, { topic: 'acid-base', formula: "HBrO₄", name: "Ácido perbrômico", type: "Ácido", strength: "Fraco" }, { topic: 'acid-base', formula: "HF", name: "Ácido fluorídrico", type: "Ácido", strength: "Moderado" }, { topic: 'acid-base', formula: "Pb(OH)₂", name: "Hidróxido de chumbo II", type: "Base", strength: "Fraca" }, { topic: 'acid-base', formula: "AuOH", name: "Hidróxido de ouro I", type: "Base", strength: "Fraca" }, { topic: 'acid-base', formula: "AgOH", name: "Hidróxido de prata", type: "Base", strength: "Fraca" }, { topic: 'acid-base', formula: "Au(OH)₃", name: "Hidróxido de ouro III", type: "Base", strength: "Fraca" }, { topic: 'acid-base', formula: "NH₄OH", name: "Hidróxido de amônio", type: "Base", strength: "Fraca" }, { topic: 'acid-base', formula: "H₂SO₃", name: "Ácido sulfuroso", type: "Ácido", strength: "Fraco" }, { topic: 'acid-base', formula: "H₄P₂O₅", name: "Ácido pirofosforoso", type: "Ácido", strength: "Fraco" }, { topic: 'acid-base', formula: "Pt(OH)₂", name: "Hidróxido de platina II", type: "Base", strength: "Fraca" }, { topic: 'acid-base', formula: "H₃PO₃", name: "Ácido ortofosforoso (ou fosforoso)", type: "Ácido", strength: "Fraco" }, { topic: 'acid-base', formula: "HIO", name: "Ácido hipoiodoso", type: "Ácido", strength: "Fraco" }, { topic: 'acid-base', formula: "Cr(OH)₂", name: "Hidróxido de cromo II", type: "Base", strength: "Fraca" }, { topic: 'acid-base', formula: "H₃AsO₄", name: "Ácido ortoarsênico (ou arsênico)", type: "Ácido", strength: "Fraco" }, { topic: 'acid-base', formula: "H₃PO₄", name: "Ácido ortofosfórico (ou fosfórico)", type: "Ácido", strength: "Fraco" }, { topic: 'acid-base', formula: "H₃BO₃", name: "Ácido ortobórico (ou bórico)", type: "Ácido", strength: "Fraco" }, { topic: 'acid-base', formula: "Sr(OH)₂", name: "Hidróxido de estrôncio", type: "Base", strength: "Forte" }, { topic: 'acid-base', formula: "HIO₄", name: "Ácido periódico", type: "Ácido", strength: "Fraco" }],
+            salts: [ { topic: 'salt', saltName: "Permanganato de potássio", saltFormula: "KMnO₄", cation: "K⁺", baseName: "hidróxido de potássio", baseFormula: "KOH", anion: "MnO₄⁻", acidName: "ácido permangânico", acidFormula: "HMnO₄" }, { topic: 'salt', saltName: "Carbonato de magnésio", saltFormula: "MgCO₃", cation: "Mg²⁺", baseName: "hidróxido de magnésio", baseFormula: "Mg(OH)₂", anion: "CO₃²⁻", acidName: "ácido carbônico", acidFormula: "H₂CO₃" }, { topic: 'salt', saltName: "Sulfeto de alumínio", saltFormula: "Al₂S₃", cation: "Al³⁺", baseName: "hidróxido de alumínio", baseFormula: "Al(OH)₃", anion: "S²⁻", acidName: "ácido sulfídrico", acidFormula: "H₂S" }, { topic: 'salt', saltName: "Clorito de chumbo II", saltFormula: "Pb(ClO₂)₂", cation: "Pb²⁺", baseName: "hidróxido de chumbo II", baseFormula: "Pb(OH)₂", anion: "ClO₂⁻", acidName: "ácido cloroso", acidFormula: "HClO₂" }, { topic: 'salt', saltName: "Cloreto de bário", saltFormula: "BaCl₂", cation: "Ba²⁺", baseName: "hidróxido de bário", baseFormula: "Ba(OH)₂", anion: "Cl⁻", acidName: "ácido clorídrico", acidFormula: "HCl" }, { topic: 'salt', saltName: "Clorato de zinco", saltFormula: "Zn(ClO₃)₂", cation: "Zn²⁺", baseName: "hidróxido de zinco", baseFormula: "Zn(OH)₂", anion: "ClO₃⁻", acidName: "ácido clórico", acidFormula: "HClO₃" }, { topic: 'salt', saltName: "Nitrato de amônio", saltFormula: "NH₄NO₃", cation: "NH₄⁺", baseName: "hidróxido de amônio", baseFormula: "NH₄OH", anion: "NO₃⁻", acidName: "ácido nítrico", acidFormula: "HNO₃" }, { topic: 'salt', saltName: "Bicarbonato de sódio", saltFormula: "NaHCO₃", cation: "Na⁺", baseName: "hidróxido de sódio", baseFormula: "NaOH", anion: "HCO₃⁻", acidName: "ácido carbônico", acidFormula: "H₂CO₃" }, { topic: 'salt', saltName: "Nitrito de cádmio", saltFormula: "Cd(NO₂)₂", cation: "Cd²⁺", baseName: "hidróxido de cádmio", baseFormula: "Cd(OH)₂", anion: "NO₂⁻", acidName: "ácido nitroso", acidFormula: "HNO₂" }, { topic: 'salt', saltName: "Fluoreto de mercúrio II", saltFormula: "HgF₂", cation: "Hg²⁺", baseName: "hidróxido de mercúrio II", baseFormula: "Hg(OH)₂", anion: "F⁻", acidName: "ácido fluorídrico", acidFormula: "HF" }, { topic: 'salt', saltName: "Metafosfito de lítio", saltFormula: "LiPO₂", cation: "Li⁺", baseName: "hidróxido de lítio", baseFormula: "LiOH", anion: "PO₂⁻", acidName: "ácido metafosforoso", acidFormula: "HPO₂" }, { topic: 'salt', saltName: "Cromato de berílio", saltFormula: "BeCrO₄", cation: "Be²⁺", baseName: "hidróxido de berílio", baseFormula: "Be(OH)₂", anion: "CrO₄²⁻", acidName: "ácido crômico", acidFormula: "H₂CrO₄" }, { topic: 'salt', saltName: "Sulfito de lítio", saltFormula: "Li₂SO₃", cation: "Li⁺", baseName: "hidróxido de lítio", baseFormula: "LiOH", anion: "SO₃²⁻", acidName: "ácido sulfuroso", acidFormula: "H₂SO₃" }, { topic: 'salt', saltName: "Sulfato de bário", saltFormula: "BaSO₄", cation: "Ba²⁺", baseName: "hidróxido de bário", baseFormula: "Ba(OH)₂", anion: "SO₄²⁻", acidName: "ácido sulfúrico", acidFormula: "H₂SO₄" }, { topic: 'salt', saltName: "Cianeto de ferro II", saltFormula: "Fe(CN)₂", cation: "Fe²⁺", baseName: "hidróxido de ferro II", baseFormula: "Fe(OH)₂", anion: "CN⁻", acidName: "ácido cianídrico", acidFormula: "HCN" }, { topic: 'salt', saltName: "Dihidrogenofosfato de estanho IV", saltFormula: "Sn(H₂PO₄)₄", cation: "Sn⁴⁺", baseName: "hidróxido de estanho IV", baseFormula: "Sn(OH)₄", anion: "H₂PO₄⁻", acidName: "ácido fosfórico", acidFormula: "H₃PO₄" }, { topic: 'salt', saltName: "Hipobromito de prata", saltFormula: "AgBrO", cation: "Ag⁺", baseName: "hidróxido de prata", baseFormula: "AgOH", anion: "BrO⁻", acidName: "ácido hipobromoso", acidFormula: "HBrO" }, { topic: 'salt', saltName: "Sulfato de cobre II", saltFormula: "CuSO₄", cation: "Cu²⁺", baseName: "hidróxido de cobre II", baseFormula: "Cu(OH)₂", anion: "SO₄²⁻", acidName: "ácido sulfúrico", acidFormula: "H₂SO₄" }, { topic: 'salt', saltName: "Iodeto de zinco", saltFormula: "ZnI₂", cation: "Zn²⁺", baseName: "hidróxido de zinco", baseFormula: "Zn(OH)₂", anion: "I⁻", acidName: "ácido iodídrico", acidFormula: "HI" }, { topic: 'salt', saltName: "Piroantimoniato de cálcio", saltFormula: "Ca₂Sb₂O₇", cation: "Ca²⁺", baseName: "hidróxido de cálcio", baseFormula: "Ca(OH)₂", anion: "Sb₂O₇⁴⁻", acidName: "ácido piroantimônico", acidFormula: "H₄Sb₂O₇" }, { topic: 'salt', saltName: "Nitrato de cobre II", saltFormula: "Cu(NO₃)₂", cation: "Cu²⁺", baseName: "hidróxido de cobre II", baseFormula: "Cu(OH)₂", anion: "NO₃⁻", acidName: "ácido nítrico", acidFormula: "HNO₃" }, { topic: 'salt', saltName: "Perbromato de cobalto II", saltFormula: "Co(BrO₄)₂", cation: "Co²⁺", baseName: "hidróxido de cobalto II", baseFormula: "Co(OH)₂", anion: "BrO₄⁻", acidName: "ácido perbrômico", acidFormula: "HBrO₄" }, { topic: 'salt', saltName: "Sulfeto de potássio", saltFormula: "K₂S", cation: "K⁺", baseName: "hidróxido de potássio", baseFormula: "KOH", anion: "S²⁻", acidName: "ácido sulfídrico", acidFormula: "H₂S" }, { topic: 'salt', saltName: "Periodato de amônio", saltFormula: "NH₄IO₄", cation: "NH₄⁺", baseName: "hidróxido de amônio", baseFormula: "NH₄OH", anion: "IO₄⁻", acidName: "ácido periódico", acidFormula: "HIO₄" }, { topic: 'salt', saltName: "Clorito de ouro I", saltFormula: "AuClO₂", cation: "Au⁺", baseName: "hidróxido de ouro I", baseFormula: "AuOH", anion: "ClO₂⁻", acidName: "ácido cloroso", acidFormula: "HClO₂" }, { topic: 'salt', saltName: "Fluoreto de amônio", saltFormula: "NH₄F", cation: "NH₄⁺", baseName: "hidróxido de amônio", baseFormula: "NH₄OH", anion: "F⁻", acidName: "ácido fluorídrico", acidFormula: "HF" }, { topic: 'salt', saltName: "Sulfato de chumbo II", saltFormula: "PbSO₄", cation: "Pb²⁺", baseName: "hidróxido de chumbo II", baseFormula: "Pb(OH)₂", anion: "SO₄²⁻", acidName: "ácido sulfúrico", acidFormula: "H₂SO₄" }, { topic: 'salt', saltName: "Fluoreto de ouro III", saltFormula: "AuF₃", cation: "Au³⁺", baseName: "hidróxido de ouro III", baseFormula: "Au(OH)₃", anion: "F⁻", acidName: "ácido fluorídrico", acidFormula: "HF" }, { topic: 'salt', saltName: "Cloreto de prata", saltFormula: "AgCl", cation: "Ag⁺", baseName: "hidróxido de prata", baseFormula: "AgOH", anion: "Cl⁻", acidName: "ácido clorídrico", acidFormula: "HCl" }, { topic: 'salt', saltName: "Hipobromito de ouro III", saltFormula: "Au(BrO)₃", cation: "Au³⁺", baseName: "hidróxido de ouro III", baseFormula: "Au(OH)₃", anion: "BrO⁻", acidName: "ácido hipobromoso", acidFormula: "HBrO" }, { topic: 'salt', saltName: "Dihidrogenoborato de estanho IV", saltFormula: "Sn(H₂BO₃)₄", cation: "Sn⁴⁺", baseName: "hidróxido de estanho IV", baseFormula: "Sn(OH)₄", anion: "H₂BO₃⁻", acidName: "ácido bórico", acidFormula: "H₃BO₃" }, { topic: 'salt', saltName: "Sulfito de sódio e amônio", saltFormula: "NH₄NaSO₃", cation: "NH₄⁺, Na⁺", baseName: "hidróxido de amônio e sódio", baseFormula: "NH₄OH e NaOH", anion: "SO₃²⁻", acidName: "ácido sulfuroso", acidFormula: "H₂SO₃" }, { topic: 'salt', saltName: "Sulfato sulfito de prata", saltFormula: "Ag₄SO₄SO₃", cation: "Ag⁺", baseName: "hidróxido de prata", baseFormula: "AgOH", anion: "SO₄²⁻ e SO₃²⁻", acidName: "ácido sulfúrico e sulfuroso", acidFormula: "H₂SO₄ e H₂SO₃" }, { topic: 'salt', saltName: "Tri-hidrogenopirofosfito de lítio", saltFormula: "LiH₃P₂O₅", cation: "Li⁺", baseName: "hidróxido de lítio", baseFormula: "LiOH", anion: "H₃P₂O₅⁻", acidName: "ácido pirofosforoso", acidFormula: "H₄P₂O₅" }, { topic: 'salt', saltName: "Cloreto de platina II", saltFormula: "PtCl₂", cation: "Pt²⁺", baseName: "hidróxido de platina II", baseFormula: "Pt(OH)₂", anion: "Cl⁻", acidName: "ácido clorídrico", acidFormula: "HCl" }, { topic: 'salt', saltName: "Fosfito de alumínio", saltFormula: "AlPO₃", cation: "Al³⁺", baseName: "hidróxido de alumínio", baseFormula: "Al(OH)₃", anion: "PO₃³⁻", acidName: "ácido fosforoso", acidFormula: "H₃PO₃" }, { topic: 'salt', saltName: "Hipoiodito de níquel III", saltFormula: "Ni(IO)₃", cation: "Ni³⁺", baseName: "hidróxido de níquel III", baseFormula: "Ni(OH)₃", anion: "IO⁻", acidName: "ácido hipoiodoso", acidFormula: "HIO" }, { topic: 'salt', saltName: "Carbonato de crômio II", saltFormula: "CrCO₃", cation: "Cr²⁺", baseName: "hidróxido de crômio II", baseFormula: "Cr(OH)₂", anion: "CO₃²⁻", acidName: "ácido carbônico", acidFormula: "H₂CO₃" }, { topic: 'salt', saltName: "Arseniato de cobalto II", saltFormula: "Co₃(AsO₄)₂", cation: "Co²⁺", baseName: "hidróxido de cobalto II", baseFormula: "Co(OH)₂", anion: "AsO₄³⁻", acidName: "ácido arsênico", acidFormula: "H₃AsO₄" }, { topic: 'salt', saltName: "Fosfato de potássio e magnésio", saltFormula: "KMgPO₄", cation: "K⁺ e Mg²⁺", baseName: "hidróxido de potássio e magnésio", baseFormula: "KOH e Mg(OH)₂", anion: "PO₄³⁻", acidName: "ácido fosfórico", acidFormula: "H₃PO₄" }, { topic: 'salt', saltName: "Borato de cobre I", saltFormula: "Cu₃BO₃", cation: "Cu⁺", baseName: "hidróxido de cobre I", baseFormula: "CuOH", anion: "BO₃³⁻", acidName: "ácido bórico", acidFormula: "H₃BO₃" }, { topic: 'salt', saltName: "Cloreto sulfato de alumínio", saltFormula: "AlClSO₄", cation: "Al³⁺", baseName: "hidróxido de alumínio", baseFormula: "Al(OH)₃", anion: "Cl⁻ e SO₄²⁻", acidName: "ácido clorídrico e sulfúrico", acidFormula: "HCl e H₂SO₄" }, { topic: 'salt', saltName: "Cloreto de sódio", saltFormula: "NaCl", cation: "Na⁺", baseName: "hidróxido de sódio", baseFormula: "NaOH", anion: "Cl⁻", acidName: "ácido clorídrico", acidFormula: "HCl" }]
+        };
+        const body = document.body;
+        const menuItensContainer = document.getElementById('menu-itens');
+        const painelLateral = document.querySelector('.painel-lateral');
+        const botaoMenuMobile = document.querySelector('.botao-menu-mobile');
+        const menuInorganico = [ { icone: 'fa-flask-vial', texto: 'Ácidos', secao: 'funcao-acido' }, { icone: 'fa-soap', texto: 'Bases', secao: 'funcao-base' }, { icone: 'fa-gem', texto: 'Sais', secao: 'funcao-sal' }, { icone: 'fa-fire-extinguisher', texto: 'Óxidos', secao: 'funcao-oxido' }, { icone: 'fa-dice', texto: 'Jogos', secao: 'secao-jogos' }, { icone: 'fa-link', texto: 'Links', secao: 'secao-links'}, { icone: 'fa-music', texto: 'Alkaline', secao: 'secao-alkaline'}];
+
+        function atualizarMenu(itens) { menuItensContainer.innerHTML = ''; itens.forEach((item, index) => { const li = document.createElement('li'); li.dataset.secao = item.secao; li.innerHTML = `<i class="fas ${item.icone}"></i> ${item.texto}`; if (index === 0) li.classList.add('active'); li.addEventListener('click', () => { alternarSecao(li); if (window.innerWidth <= 900) painelLateral.classList.remove('ativo'); }); menuItensContainer.appendChild(li); }); if(menuItensContainer.firstChild) alternarSecao(menuItensContainer.firstChild); }
+        function alternarSecao(liElemento) { document.querySelectorAll('.navegacao-menu li').forEach(li => li.classList.remove('active')); liElemento.classList.add('active'); const secaoAlvo = document.getElementById(liElemento.dataset.secao); document.querySelectorAll('.secao-conteudo').forEach(secao => secao.classList.remove('ativo')); if (secaoAlvo) secaoAlvo.classList.add('ativo'); }
+        botaoMenuMobile.addEventListener('click', () => painelLateral.classList.toggle('ativo'));
+
+        const gameDOM = { configView: document.getElementById('game-config-view'), modeChoiceView: document.getElementById('mode-choice-view'), testView: document.getElementById('test-view'), resultsView: document.getElementById('test-results-view'), generateTestBtn: document.getElementById('generate-test-btn'), startOnlineBtn: document.getElementById('start-online-btn'), printTestBtn: document.getElementById('print-test-btn'), backToConfigBtn: document.getElementById('back-to-config-btn'), exitTestBtn: document.getElementById('exit-test-btn'), questionContainer: document.getElementById('test-question-container'), questionsOptions: document.getElementById('questions-options'), timerOptions: document.getElementById('timer-options'), topicOptions: document.getElementById('topic-options'), currentQuestion: document.getElementById('current-question'), totalQuestions: document.getElementById('total-questions'), testCorrect: document.getElementById('test-correct'), testIncorrect: document.getElementById('test-incorrect'), timerContainer: document.getElementById('timer-container'), printVersion: document.getElementById('print-version') };
+        let gameState = { questions: [], currentQuestionIndex: 0, score: { correct: 0, incorrect: 0 }, errors: [], timerInterval: null, timeLeft: 0, useTimer: false };
+        const shuffleArray = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]]; } return a; };
+        const formatTime = s => { const m = Math.floor(s / 60); const rs = s % 60; return `${m}:${rs < 10 ? '0' : ''}${rs}`; };
+
+        function showGameView(viewToShow) { [gameDOM.configView, gameDOM.modeChoiceView, gameDOM.testView, gameDOM.resultsView].forEach(v => v.classList.add('hidden')); if(viewToShow) viewToShow.classList.remove('hidden'); }
+        
+        function resetGameView() { clearInterval(gameState.timerInterval); showGameView(gameDOM.configView); }
+
+        gameDOM.generateTestBtn.addEventListener('click', () => {
+            const selectedTopics = Array.from(gameDOM.topicOptions.querySelectorAll('input:checked')).map(cb => cb.value);
+            if (selectedTopics.length === 0) { alert('Por favor, selecione pelo menos um conteúdo para o teste.'); return; }
+            let questionPool = [];
+            if (selectedTopics.includes('oxide')) questionPool.push(...fullDB.oxides);
+            if (selectedTopics.includes('acid-base')) questionPool.push(...fullDB.acidsBases);
+            if (selectedTopics.includes('salt')) questionPool.push(...fullDB.salts);
+            shuffleArray(questionPool);
+            const numQuestions = parseInt(gameDOM.questionsOptions.querySelector('.selected').dataset.questions, 10);
+            if(questionPool.length < numQuestions) { alert(`Você selecionou ${numQuestions} perguntas, mas só existem ${questionPool.length} disponíveis para os tópicos escolhidos. Por favor, selecione mais tópicos ou menos perguntas.`); return; }
+            gameState.questions = questionPool.slice(0, numQuestions).map(q => {
+                let availableModes = [];
+                if (q.topic === 'oxide') availableModes = ['formulaToName', 'nameToFormula', 'classify'];
+                else if (q.topic === 'acid-base') availableModes = ['formulaToName', 'nameToFormula', 'classify', 'strength'];
+                else if (q.topic === 'salt') availableModes = ['nameToFormula', 'formulaToName', 'origin', 'reactionToName', 'reactionToFormula'];
+                q.mode = shuffleArray(availableModes)[0];
+                return q;
+            });
+            gameState.useTimer = gameDOM.timerOptions.querySelector('.selected').dataset.timer === 'true';
+            showGameView(gameDOM.modeChoiceView);
+        });
+
+        gameDOM.questionsOptions.addEventListener('click', (e) => { if(e.target.classList.contains('config-btn')) { gameDOM.questionsOptions.querySelectorAll('.config-btn').forEach(b => b.classList.remove('selected')); e.target.classList.add('selected'); } });
+        gameDOM.timerOptions.addEventListener('click', (e) => { if(e.target.classList.contains('config-btn')) { gameDOM.timerOptions.querySelectorAll('.config-btn').forEach(b => b.classList.remove('selected')); e.target.classList.add('selected'); } });
+
+        function startOnlineTest() {
+            gameState.currentQuestionIndex = 0; gameState.score = { correct: 0, incorrect: 0 }; gameState.errors = [];
+            if (gameState.useTimer) {
+                gameState.timeLeft = gameState.questions.length * 90;
+                gameDOM.timerContainer.textContent = `Tempo: ${formatTime(gameState.timeLeft)}`;
+                gameDOM.timerContainer.classList.remove('hidden');
+                gameState.timerInterval = setInterval(() => { gameState.timeLeft--; gameDOM.timerContainer.textContent = `Tempo: ${formatTime(gameState.timeLeft)}`; if (gameState.timeLeft <= 0) finishTest('time_up'); }, 1000);
+            } else { gameDOM.timerContainer.classList.add('hidden'); }
+            showGameView(gameDOM.testView);
+            loadNextTestQuestion();
+        }
+
+        function loadNextTestQuestion() { if (gameState.currentQuestionIndex >= gameState.questions.length) { finishTest(); return; } updateTestStats(); renderUnifiedQuestion(gameState.questions[gameState.currentQuestionIndex]); }
+        function updateTestStats() { gameDOM.currentQuestion.textContent = gameState.currentQuestionIndex + 1; gameDOM.totalQuestions.textContent = gameState.questions.length; gameDOM.testCorrect.textContent = gameState.score.correct; gameDOM.testIncorrect.textContent = gameState.score.incorrect; }
+        
+        function handleAnswer(isCorrect, userAnswer = 'Incorreto (autoavaliação)') {
+            const question = gameState.questions[gameState.currentQuestionIndex];
+            if (isCorrect) { gameState.score.correct++; } else { gameState.score.incorrect++; gameState.errors.push({ question, userAnswer }); }
+            updateTestStats();
+            gameState.currentQuestionIndex++;
+            setTimeout(loadNextTestQuestion, 1200);
+        }
+
+        function renderUnifiedQuestion(q) {
+            const container = gameDOM.questionContainer; container.innerHTML = '';
+            let qText, qContent, aContentHTML, isMcq = false, options = [];
+            const correctAnswerProperty = q.mode === 'classify' ? 'type' : q.mode === 'strength' ? 'strength' : null;
+            
+            switch(q.topic) {
+                case 'oxide': switch(q.mode) { case 'formulaToName': qText = 'Qual é o nome do óxido:'; qContent = q.formula; aContentHTML = `<div class="card-answer-text">${q.name}</div>`; break; case 'nameToFormula': qText = 'Qual é a fórmula para o óxido:'; qContent = q.name; aContentHTML = `<div class="formula">${q.formula}</div>`; break; case 'classify': isMcq = true; qText = `Qual a classificação do óxido:`; qContent = q.formula; options = ["Óxido ácido", "Óxido básico", "Óxido anfótero", "Óxido neutro", "Peróxido", "Superóxido", "Óxido duplo"]; break; } break;
+                case 'acid-base': switch(q.mode) { case 'formulaToName': qText = 'Qual o nome do composto:'; qContent = q.formula; aContentHTML = `<div class="card-answer-text">${q.name}</div>`; break; case 'nameToFormula': qText = 'Qual a fórmula para:'; qContent = q.name; aContentHTML = `<div class="formula">${q.formula}</div>`; break; case 'classify': isMcq = true; qText = 'O composto é ácido ou base?'; qContent = q.formula; options = ["Ácido", "Base"]; break; case 'strength': isMcq = true; qText = 'Qual a força do composto:'; qContent = Math.random() < 0.5 ? q.formula : q.name; options = ["Forte", "Fraca", "Moderado"]; break; } break;
+                case 'salt': switch (q.mode) { case 'nameToFormula': qText = 'Qual a fórmula para o sal:'; qContent = q.saltName; aContentHTML = `<div class="formula">${q.saltFormula}</div>`; break; case 'formulaToName': qText = 'Qual o nome do sal:'; qContent = q.saltFormula; aContentHTML = `<div class="card-answer-text">${q.saltName}</div>`; break; case 'origin': qText = 'Quais os íons de origem do sal:'; qContent = q.saltFormula; aContentHTML = `<div class="card-answer-text"><p><strong>Cátion:</strong> ${q.cation} (de ${q.baseName})</p><p><strong>Ânion:</strong> ${q.anion} (de ${q.acidName})</p></div>`; break; case 'reactionToName': qText = 'Qual o nome do sal formado por:'; qContent = `${q.baseName} + ${q.acidName}`; aContentHTML = `<div class="card-answer-text">${q.saltName}</div>`; break; case 'reactionToFormula': qText = 'Qual a fórmula do sal formado por:'; qContent = `${q.baseFormula} + ${q.acidFormula}`; aContentHTML = `<div class="formula">${q.saltFormula}</div>`; break; } break;
+            }
+
+            if(isMcq) {
+                 const correctAnswer = q[correctAnswerProperty];
+                 let mcqOptions = [correctAnswer];
+                 const filteredOptions = options.filter(opt => opt !== correctAnswer);
+                 shuffleArray(filteredOptions);
+                 while(mcqOptions.length < (options.length >= 4 ? 4 : options.length)) { mcqOptions.push(filteredOptions.pop()); }
+                 shuffleArray(mcqOptions);
+                 container.innerHTML = `<h4 class="card-question-text">${qText}</h4><div class="formula">${qContent}</div><div class="options-grid-btn">${mcqOptions.map(opt => `<button class="config-btn mcq-option">${opt}</button>`).join('')}</div>`;
+            } else {
+                 container.innerHTML = `<div class="card"><div class="card-inner"><div class="card-front"><h4 class="card-question-text">${qText}</h4><div class="formula">${qContent}</div><button class="config-btn show-answer-btn">Mostrar Resposta</button></div><div class="card-back">${aContentHTML}<div class="answer-feedback"><button class="config-btn correct-btn">Acertei</button><button class="config-btn incorrect-btn">Errei</button></div></div></div></div>`;
+            }
+        }
+        
+        function finishTest(reason = '') {
+            clearInterval(gameState.timerInterval);
+            if(reason === 'time_up') {
+                for(let i = gameState.currentQuestionIndex; i < gameState.questions.length; i++) {
+                    gameState.errors.push({ question: gameState.questions[i], userAnswer: 'Tempo esgotado' });
+                    gameState.score.incorrect++;
+                }
+            }
+            const total = gameState.questions.length;
+            const correct = gameState.score.correct;
+            const percentage = total > 0 ? Math.round((correct / total) * 100) : 0;
+            let percentageClass = 'low';
+            if (percentage >= 80) percentageClass = 'high'; else if (percentage >= 50) percentageClass = 'medium';
+
+            let errorsHTML = '<h3>Erros para revisar:</h3>';
+            if (gameState.errors.length > 0) {
+                gameState.errors.forEach(err => {
+                    const q = err.question; let qText = '', cAnswer = '';
+                    if (q.topic === 'oxide' || q.topic === 'acid-base') {
+                        if (q.mode === 'formulaToName') { qText = `Nome para <strong>${q.formula}</strong>`; cAnswer = q.name; }
+                        else if (q.mode === 'nameToFormula') { qText = `Fórmula para <strong>${q.name}</strong>`; cAnswer = q.formula; }
+                        else if (q.mode === 'classify') { qText = `Classificação de <strong>${q.formula}</strong>`; cAnswer = q.type; }
+                        else if (q.mode === 'strength') { qText = `Força de <strong>${q.name || q.formula}</strong>`; cAnswer = q.strength; }
+                    } else if (q.topic === 'salt') {
+                        if (q.mode === 'formulaToName') { qText = `Nome para <strong>${q.saltFormula}</strong>`; cAnswer = q.saltName; }
+                        else if (q.mode === 'nameToFormula') { qText = `Fórmula para <strong>${q.saltName}</strong>`; cAnswer = q.saltFormula; }
+                        else { qText = `Origem/Reação de <strong>${q.saltName}</strong>`; cAnswer = "Ver verso do card"; }
+                    }
+                    errorsHTML += `<div class="error-item"><p><strong>Questão:</strong> ${qText}</p><p><strong>Sua Resposta:</strong> <span class="user-answer">${err.userAnswer}</span></p><p><strong>Correta:</strong> <span class="correct-answer">${cAnswer}</span></p></div>`;
+                });
+            } else { errorsHTML += '<p>Nenhum erro! Parabéns!</p>'; }
+
+            gameDOM.resultsView.innerHTML = `<div class="card test-results"><h2>Resultados do Teste</h2><p>${correct} acertos de ${total} perguntas</p><div class="results-percentage ${percentageClass}">${percentage}%</div><div class="errors-list">${errorsHTML}</div><div class="results-actions"><button class="config-btn" id="restart-game-btn">Fazer Novo Teste</button><button class="config-btn" id="print-results-btn">Imprimir Resultados</button></div></div>`;
+            document.getElementById('restart-game-btn').addEventListener('click', resetGameView);
+            document.getElementById('print-results-btn').addEventListener('click', () => { generatePrintableHTML(true); window.print(); });
+            showGameView(gameDOM.resultsView);
+        }
+
+        function generatePrintableHTML(isResults = false) {
+            const { questions, useTimer } = gameState;
+            const timeText = useTimer ? formatTime(questions.length * 90) : "Livre";
+            const headerHTML = `<div class="print-header"><h2>Teste de Funções Inorgânicas</h2><p><strong>Total de Perguntas:</strong> ${questions.length}</p><p><strong>Tempo Sugerido:</strong> ${timeText}</p></div>`;
+            let mainContentHTML = ''; let gabaritoHTML = '';
+
+            if(isResults) {
+                mainContentHTML = gameDOM.resultsView.querySelector('.test-results').innerHTML;
+            } else {
+                let questionsHTML = questions.map((q, index) => {
+                    let questionText = '', questionAnswerHTML = '';
+                    switch(q.topic) {
+                        case 'oxide': switch(q.mode) { case 'formulaToName': questionText = `Qual é o nome do óxido: <strong>${q.formula}</strong>?`; questionAnswerHTML = `<div class="answer-box"></div>`; break; case 'nameToFormula': questionText = `Qual é a fórmula para o óxido: <strong>${q.name}</strong>?`; questionAnswerHTML = `<div class="answer-box"></div>`; break; case 'classify': questionText = `Qual a classificação do óxido: <strong>${q.formula}</strong>?`; questionAnswerHTML = `<div class="mcq-options-print">${["Óxido ácido", "Óxido básico", "Óxido anfótero", "Óxido neutro", "Peróxido", "Superóxido", "Óxido duplo"].map(o => `<div class="mcq-option-print">□ ${o}</div>`).join('')}</div>`; break; } break;
+                        case 'acid-base': switch(q.mode) { case 'formulaToName': questionText = `Qual o nome do composto: <strong>${q.formula}</strong>?`; questionAnswerHTML = `<div class="answer-box"></div>`; break; case 'nameToFormula': questionText = `Qual a fórmula para: <strong>${q.name}</strong>?`; questionAnswerHTML = `<div class="answer-box"></div>`; break; case 'classify': questionText = `O composto <strong>${q.formula}</strong> é um ácido ou uma base?`; questionAnswerHTML = `<div class="mcq-options-print">${["Ácido", "Base"].map(o => `<div class="mcq-option-print">□ ${o}</div>`).join('')}</div>`; break; case 'strength': const basis = Math.random() < 0.5 ? q.formula : q.name; questionText = `Qual a força do composto: <strong>${basis}</strong>?`; questionAnswerHTML = `<div class="mcq-options-print">${["Forte", "Fraca", "Moderado"].map(o => `<div class="mcq-option-print">□ ${o}</div>`).join('')}</div>`; break; } break;
+                        case 'salt': switch (q.mode) { case 'nameToFormula': questionText = `Qual a fórmula para: <strong>${q.saltName}</strong>?`; break; case 'formulaToName': questionText = `Qual o nome para: <strong>${q.saltFormula}</strong>?`; break; case 'origin': questionText = `Quais os íons de origem de: <strong>${q.saltFormula}</strong>?`; break; case 'reactionToName': questionText = `Qual o nome do sal de: <strong>${q.baseName} + ${q.acidName}</strong>?`; break; case 'reactionToFormula': questionText = `Qual a fórmula do sal de: <strong>${q.baseFormula} + ${q.acidFormula}</strong>?`; break; } questionAnswerHTML = `<div class="answer-box"></div>`; break;
+                    }
+                    return `<div class="print-question-item"><h4>QUESTÃO ${index + 1}</h4><p>${questionText}</p>${questionAnswerHTML}</div>`;
+                }).join('');
+                mainContentHTML = `<div class="print-questions-grid">${questionsHTML}</div>`;
+
+                let gabaritoLi = questions.map((q, i) => {
+                    let answer = '';
+                    if (q.topic === 'salt') {
+                        switch(q.mode) { case 'nameToFormula': answer=q.saltFormula; break; case 'formulaToName': answer=q.saltName; break; case 'origin': answer=`${q.cation}, ${q.anion}`; break; case 'reactionToName': answer=q.saltName; break; case 'reactionToFormula': answer=q.saltFormula; break; }
+                    } else {
+                        switch(q.mode) { case 'formulaToName': answer=q.name; break; case 'nameToFormula': answer=q.formula; break; case 'classify': answer=q.type; break; case 'strength': answer=q.strength; break; }
+                    }
+                    return `<li><strong>${i + 1}.</strong> ${answer}</li>`;
+                }).join('');
+                gabaritoHTML = `<div class="print-gabarito"><h2>Gabarito</h2><ol>${gabaritoLi}</ol></div>`;
+            }
+            gameDOM.printVersion.innerHTML = `${headerHTML}${mainContentHTML}${gabaritoHTML}`;
+        }
+
+        gameDOM.startOnlineBtn.addEventListener('click', startOnlineTest);
+        
+        gameDOM.printTestBtn.addEventListener('click', () => {
+            generatePrintableHTML(false);
+            window.print();
+        });
+
+        gameDOM.exitTestBtn.addEventListener('click', resetGameView);
+        gameDOM.backToConfigBtn.addEventListener('click', resetGameView);
+        
+        gameDOM.questionContainer.addEventListener('click', (e) => {
+            const target = e.target;
+            const card = gameDOM.questionContainer.querySelector('.card');
+            if(target.matches('.show-answer-btn')) { card.classList.add('flipped'); }
+            else if (target.matches('.correct-btn')) { handleAnswer(true); }
+            else if (target.matches('.incorrect-btn')) { handleAnswer(false); }
+            else if (target.matches('.mcq-option')) {
+                const question = gameState.questions[gameState.currentQuestionIndex];
+                const correctAnswer = question.mode === 'strength' ? question.strength : question.type;
+                const isCorrect = target.textContent === correctAnswer;
+                gameDOM.questionContainer.querySelectorAll('.mcq-option').forEach(btn => { btn.disabled = true; if(btn.textContent === correctAnswer) btn.classList.add('selected'); });
+                if(!isCorrect) target.style.backgroundColor = 'var(--cor-primaria)';
+                handleAnswer(isCorrect, target.textContent);
+            }
+        });
+
+        atualizarMenu(menuInorganico);
+    });
+    </script>
+</body>
+</html>
